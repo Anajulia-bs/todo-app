@@ -1,28 +1,33 @@
-const { MongoClient } = require('mongodb');
+//  @ts-check
+const { MongoClient, Db } = require("mongodb");
 
-require('dotenv').config();
+require("dotenv").config();
 
-// this define the DB options 
+// this define the DB options
 
 const OPTIONS = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 
-// this part show where and DB name
+// this part show where is the DB connected and DB name
 
-const MONGO_DB_URL = 'mongodb://localhost:27017';
-const DB_NAME = 'todoList';
+const MONGO_DB_URL = "mongodb://localhost:27017";
+const DB_NAME = "todoList";
 let db = null;
 
 //create a connection with DB
-
-const connection = () => (db
+/**
+ *
+ * @returns {Promise<Db>}
+ */
+const connection = () =>
+  db
     ? Promise.resolve(db)
-    : MongoClient.connect(MONGO_DB_URL, OPTIONS)
-    .then((conn) => {
-    db = conn.db(DB_NAME);
-    return db;
-    }));
+    : // @ts-ignore
+      MongoClient.connect(MONGO_DB_URL, OPTIONS).then((conn) => {
+        db = conn.db(DB_NAME);
+        return db;
+      });
 
- module.exports = connection;
+module.exports = connection;
